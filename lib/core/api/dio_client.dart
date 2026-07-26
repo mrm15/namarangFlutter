@@ -1,0 +1,41 @@
+import 'package:dio/dio.dart';
+import 'package:namarang/core/api/interceptors/auth_interceptor.dart';
+import 'package:namarang/core/api/interceptors/error_interceptor.dart';
+import 'package:namarang/core/api/interceptors/logger_interceptor.dart';
+
+import 'api_endpoints.dart';
+
+class DioClient {
+  DioClient._();
+
+  static Dio create() {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: ApiEndpoints.baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    dio.interceptors.addAll([
+      AuthInterceptor(),
+      ErrorInterceptor(),
+      loggerInterceptor(),
+    ]);
+    // dio.interceptors.add(
+    //   PrettyDioLogger(
+    //     requestBody: true,
+    //     requestHeader: true,
+    //     responseBody: true,
+    //     responseHeader: false,
+    //   ),
+    // );
+
+    return dio;
+  }
+}
