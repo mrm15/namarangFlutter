@@ -1,23 +1,18 @@
-class LoginResponse {
+import 'package:equatable/equatable.dart';
+
+class LoginResponse extends Equatable {
   final bool success;
-  final bool status;
   final String message;
 
-  const LoginResponse({
-    required this.success,
-    required this.status,
-    required this.message,
-  });
+  const LoginResponse({required this.success, required this.message});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
-      success: json['success'] as bool,
-      status: json['status'] as bool,
-      message: json['message'] as String,
+      success: json['success'] ?? false,
+      message: json['message'] ?? '',
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {'success': success, 'status': status, 'message': message};
-  }
+  @override
+  List<Object?> get props => [success, message];
 }

@@ -1,4 +1,6 @@
-class LoginRequest {
+import 'package:equatable/equatable.dart';
+
+class LoginRequest extends Equatable {
   final String phoneNumber;
   final bool secretMode;
 
@@ -7,4 +9,7 @@ class LoginRequest {
   Map<String, dynamic> toJson() {
     return {'phoneNumber': phoneNumber, 'secretMode': secretMode};
   }
+
+  @override
+  List<Object?> get props => [phoneNumber, secretMode];
 }
