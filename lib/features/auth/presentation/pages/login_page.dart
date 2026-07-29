@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/locator.dart';
 import '../cubit/auth_cubit.dart';
@@ -30,8 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state.loginResponse?.success == true) {
-            // TODO:
-            // context.push('/otp');
+            context.push('/otp', extra: phoneController.text.trim());
           }
 
           if (state.errorMessage != null) {

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:namarang/features/auth/presentation/pages/otp_page.dart';
 
 import '../features/auth/presentation/pages/login_page.dart';
 // import '../features/home/presentation/pages/home_page.dart';
@@ -12,6 +13,13 @@ class AppRouter {
     routes: [
       GoRoute(path: '/', builder: (_, __) => const SplashPage()),
       GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+      GoRoute(
+        path: '/otp',
+        builder: (context, state) {
+          final phone = state.extra as String;
+          return OtpPage(phoneNumber: phone);
+        },
+      ),
       GoRoute(
         path: '/home',
         // builder: (_, __) => const HomePage(),
