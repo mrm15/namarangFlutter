@@ -19,7 +19,7 @@ class LocationService {
       accuracy: LocationAccuracy.bestForNavigation,
 
       // هر ۱۰ متر یک بار
-      distanceFilter: 10,
+      distanceFilter: 0,
     );
 
     return Geolocator.getPositionStream(locationSettings: settings);

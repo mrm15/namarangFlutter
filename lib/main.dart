@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:namarang/core/services/background_service.dart';
 import 'package:namarang/core/services/location_service.dart';
 import 'package:namarang/core/services/permission_service.dart';
 
@@ -17,9 +19,15 @@ Future<void> main() async {
   final location = LocationService();
 
   final position = await location.getCurrentLocation();
+  await BackgroundService.initialize();
+  await BackgroundService.start();
+  final isRunning = await FlutterBackgroundService().isRunning();
+
+  debugPrint('Service running: $isRunning');
 
   print('Permission: $position.latitude');
-  print('Permission: $position.longitude');
-
+  final subscription = location.getPositionStream().listen((position) {
+    debugPrint('MAIN => ${position.latitude}, ${position.longitude}');
+  });
   runApp(const NamrangApp());
 }
