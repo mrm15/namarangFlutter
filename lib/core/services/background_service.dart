@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
 
+@pragma('vm:entry-point')
 class BackgroundService {
   static final service = FlutterBackgroundService();
 

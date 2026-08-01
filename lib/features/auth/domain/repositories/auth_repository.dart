@@ -1,6 +1,6 @@
 import '../../data/models/login_request.dart';
-import '../../data/models/login_response.dart';
+import '../entities/login_entity.dart';
 
 abstract class AuthRepository {
-  Future<LoginResponse> sendOtp(LoginRequest request);
+  Future<LoginEntity> sendOtp(LoginRequest request);
 }

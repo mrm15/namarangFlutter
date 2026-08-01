@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namarang/core/constants/app_strings.dart';
 
 class PhoneTextField extends StatelessWidget {
   const PhoneTextField({super.key, required this.controller});
@@ -13,19 +14,19 @@ class PhoneTextField extends StatelessWidget {
       textInputAction: TextInputAction.done,
       maxLength: 11,
       decoration: const InputDecoration(
-        labelText: 'شماره موبایل',
-        hintText: '09123456789',
+        labelText: AppStrings.phoneNumberLabel,
+        hintText: AppStrings.phoneNumberHint,
         counterText: '',
       ),
       validator: (value) {
         final phone = value?.trim() ?? '';
 
         if (phone.isEmpty) {
-          return 'شماره موبایل را وارد کنید';
+          return AppStrings.phoneNumberRequired;
         }
 
         if (!RegExp(r'^09\d{9}$').hasMatch(phone)) {
-          return 'شماره موبایل معتبر نیست';
+          return AppStrings.invalidPhoneNumber;
         }
 
         return null;

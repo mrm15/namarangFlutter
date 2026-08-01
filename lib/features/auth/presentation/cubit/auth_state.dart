@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 
-import '../../data/models/login_response.dart';
+import '../../domain/entities/login_entity.dart';
 
 class AuthState extends Equatable {
-  final bool isLoading;
-  final LoginResponse? loginResponse;
-  final String? errorMessage;
-
   const AuthState({
     this.isLoading = false,
     this.loginResponse,
     this.errorMessage,
   });
 
+  final bool isLoading;
+  final LoginEntity? loginResponse;
+  final String? errorMessage;
+
   AuthState copyWith({
     bool? isLoading,
-    LoginResponse? loginResponse,
+    LoginEntity? loginResponse,
     String? errorMessage,
   }) {
     return AuthState(

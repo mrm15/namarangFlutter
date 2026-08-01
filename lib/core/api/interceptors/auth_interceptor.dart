@@ -1,10 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // بعداً Token را اینجا اضافه می‌کنیم
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    options.headers.addAll({
+      'X-Client-Platform': 'flutter',
+      'X-App-Version': '1.0.0',
+      'X-Device-Platform': defaultTargetPlatform.name,
+    });
 
-    super.onRequest(options, handler);
+    return handler.next(options);
   }
 }

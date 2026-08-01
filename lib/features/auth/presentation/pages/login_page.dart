@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../core/di/locator.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_state.dart';
 import '../widgets/login_button.dart';
 import '../widgets/phone_text_field.dart';
+import 'dart:developer' as developer;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -30,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
       create: (_) => locator<AuthCubit>(),
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
+          developer.log('SERVICE STARTED', name: 'NAMRANG');
+
           if (state.loginResponse?.success == true) {
             context.push('/otp', extra: phoneController.text.trim());
           }

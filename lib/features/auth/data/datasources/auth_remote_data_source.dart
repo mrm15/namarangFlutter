@@ -2,10 +2,10 @@ import 'package:namarang/core/api/api_client.dart';
 import 'package:namarang/core/api/api_endpoints.dart';
 
 import '../models/login_request.dart';
-import '../models/login_response.dart';
+import '../models/login_response_model.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<LoginResponse> sendOtp(LoginRequest request);
+  Future<LoginResponseModel> sendOtp(LoginRequest request);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -14,12 +14,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiClient _apiClient;
 
   @override
-  Future<LoginResponse> sendOtp(LoginRequest request) async {
+  Future<LoginResponseModel> sendOtp(LoginRequest request) async {
     final response = await _apiClient.post(
       ApiEndpoints.login,
       data: request.toJson(),
     );
 
-    return LoginResponse.fromJson(response.data);
+    return LoginResponseModel.fromJson(response.data);
   }
 }

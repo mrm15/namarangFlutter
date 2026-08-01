@@ -1,5 +1,5 @@
+import 'package:namarang/features/auth/domain/entities/login_entity.dart';
 import '../../data/models/login_request.dart';
-import '../../data/models/login_response.dart';
 import '../repositories/auth_repository.dart';
 
 class LoginUseCase {
@@ -7,7 +7,7 @@ class LoginUseCase {
 
   final AuthRepository _repository;
 
-  Future<LoginResponse> call(LoginRequest request) {
+  Future<LoginEntity> call(LoginRequest request) {
     return _repository.sendOtp(request);
   }
 }

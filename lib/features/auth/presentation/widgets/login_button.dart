@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namarang/core/constants/app_strings.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({
@@ -19,7 +20,7 @@ class LoginButton extends StatelessWidget {
         onPressed: loading ? null : onPressed,
         child: loading
             ? const CircularProgressIndicator()
-            : const Text('دریافت کد'),
+            : const Text(AppStrings.btnLoginLabel),
       ),
     );
   }
