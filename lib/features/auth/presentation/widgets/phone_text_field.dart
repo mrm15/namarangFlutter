@@ -13,6 +13,7 @@ class PhoneTextField extends StatelessWidget {
       keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.done,
       maxLength: 11,
+      style: const TextStyle(fontWeight: FontWeight.w400),
       decoration: const InputDecoration(
         labelText: AppStrings.phoneNumberLabel,
         hintText: AppStrings.phoneNumberHint,

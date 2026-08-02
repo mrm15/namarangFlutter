@@ -20,7 +20,10 @@ class LoginButton extends StatelessWidget {
         onPressed: loading ? null : onPressed,
         child: loading
             ? const CircularProgressIndicator()
-            : const Text(AppStrings.btnLoginLabel),
+            : const Text(
+                AppStrings.btnLoginLabel,
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
       ),
     );
   }
