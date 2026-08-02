@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:namarang/features/auth/presentation/pages/otp_page.dart';
+import 'package:namarang/features/home/pages/home_page.dart';
 
 import '../features/auth/presentation/pages/login_page.dart';
 // import '../features/home/presentation/pages/home_page.dart';
@@ -23,7 +24,7 @@ class AppRouter {
       GoRoute(
         path: '/home',
         // builder: (_, __) => const HomePage(),
-        builder: (_, __) => const LoginPage(),
+        builder: (_, __) => const HomePage(),
       ),
     ],
   );

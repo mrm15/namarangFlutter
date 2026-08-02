@@ -3,9 +3,13 @@ abstract final class AppStrings {
 
   // Login
   static const loginTitle = 'ورود';
+  static const loginWelcomeTitle = 'به نمارنگ خوش اومدی 👋';
+  static const loginWelcomeSubtitle = 'برای ورود، شماره موبایلت رو وارد کن';
   static const phoneNumberLabel = 'شماره موبایل';
   static const phoneNumberHint = '09123456789';
   static const btnLoginLabel = 'دریافت کد';
+  static const loginTermsText =
+      'با ورود، شرایط و قوانین نمارنگ رو می\u200cپذیری';
 
   // Validation
   static const phoneNumberRequired = 'شماره موبایل را وارد کنید';

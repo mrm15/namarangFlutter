@@ -2,13 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:namarang/core/api/interceptors/auth_interceptor.dart';
 import 'package:namarang/core/api/interceptors/error_interceptor.dart';
 import 'package:namarang/core/api/interceptors/logger_interceptor.dart';
+import 'package:namarang/core/storage/secure_storage.dart';
 
 import 'api_endpoints.dart';
 
 class DioClient {
   DioClient._();
 
-  static Dio create() {
+  static Dio create(SecureStorage storage) {
     final dio = Dio(
       BaseOptions(
         baseUrl: ApiEndpoints.baseUrl,
@@ -23,18 +24,12 @@ class DioClient {
     );
 
     dio.interceptors.addAll([
-      AuthInterceptor(),
+      AuthInterceptor(storage),
+
       ErrorInterceptor(),
+
       loggerInterceptor(),
     ]);
-    // dio.interceptors.add(
-    //   PrettyDioLogger(
-    //     requestBody: true,
-    //     requestHeader: true,
-    //     responseBody: true,
-    //     responseHeader: false,
-    //   ),
-    // );
 
     return dio;
   }

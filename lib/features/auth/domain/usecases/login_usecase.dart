@@ -1,5 +1,5 @@
-import 'package:namarang/features/auth/domain/entities/login_entity.dart';
 import '../../data/models/login_request.dart';
+import '../entities/login_entity.dart';
 import '../repositories/auth_repository.dart';
 
 class LoginUseCase {
