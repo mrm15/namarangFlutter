@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:namarang/core/di/locator.dart';
+import 'package:namarang/core/utils/logger.dart';
 import 'package:namarang/features/splash/presentation/cubit/splash_cubit.dart';
 import 'package:namarang/features/splash/presentation/cubit/splash_state.dart';
 
@@ -14,6 +15,9 @@ class SplashPage extends StatelessWidget {
       create: (_) => locator<SplashCubit>()..initialize(),
       child: BlocListener<SplashCubit, SplashState>(
         listener: (context, state) {
+          AppLogger.i(
+            'SplashState => loading:${state.isLoading} logged:${state.isLoggedIn}',
+          );
           if (state.isLoading) return;
 
           if (state.isLoggedIn) {
