@@ -18,6 +18,9 @@ import 'package:namarang/features/splash/presentation/cubit/splash_cubit.dart';
 final locator = GetIt.instance;
 
 Future<void> setupLocator() async {
+  // Storage
+  locator.registerLazySingleton<SecureStorage>(() => SecureStorage());
+
   // Dio
   locator.registerLazySingleton<Dio>(
     () => DioClient.create(locator<SecureStorage>()),
@@ -25,9 +28,6 @@ Future<void> setupLocator() async {
 
   // Api Client
   locator.registerLazySingleton<ApiClient>(() => ApiClient(locator<Dio>()));
-
-  // Storage
-  locator.registerLazySingleton<SecureStorage>(() => SecureStorage());
 
   // DataSource
   locator.registerLazySingleton<AuthRemoteDataSource>(
