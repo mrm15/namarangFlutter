@@ -36,14 +36,14 @@ class _OtpPageState extends State<OtpPage> {
       create: (_) => locator<AuthCubit>(),
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state.authResponse != null) {
+          if (state is Authenticated) {
             context.go('/home');
           }
 
-          if (state.errorMessage != null) {
+          if (state is AuthFailure) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {

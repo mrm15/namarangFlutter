@@ -1,4 +1,3 @@
-import '../../data/models/verify_otp_request.dart';
 import '../entities/auth_entity.dart';
 import '../repositories/auth_repository.dart';
 
@@ -7,7 +6,7 @@ class VerifyOtpUseCase {
 
   final AuthRepository _repository;
 
-  Future<AuthEntity> call(VerifyOtpRequest request) {
-    return _repository.verifyOtp(request);
+  Future<AuthEntity> call({required String phoneNumber, required String code}) {
+    return _repository.verifyOtp(phoneNumber: phoneNumber, code: code);
   }
 }

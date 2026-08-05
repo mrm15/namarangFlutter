@@ -5,10 +5,10 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 Interceptor loggerInterceptor() {
   if (kDebugMode) {
     return PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
+      requestHeader: false,
+      requestBody: false,
       responseHeader: false,
-      responseBody: true,
+      responseBody: false,
       error: true,
       compact: true,
     );

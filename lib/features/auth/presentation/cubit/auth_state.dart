@@ -3,43 +3,46 @@ import 'package:equatable/equatable.dart';
 import '../../domain/entities/auth_entity.dart';
 import '../../domain/entities/login_entity.dart';
 
-class AuthState extends Equatable {
-  const AuthState({
-    this.isLoading = false,
-    this.loginResponse,
-    this.authResponse,
-    this.errorMessage,
-  });
+sealed class AuthState extends Equatable {
+  const AuthState();
 
-  final bool isLoading;
-
-  /// نتیجه ارسال OTP
-  final LoginEntity? loginResponse;
-
-  /// نتیجه Verify OTP
-  final AuthEntity? authResponse;
-
-  final String? errorMessage;
-
-  AuthState copyWith({
-    bool? isLoading,
-    LoginEntity? loginResponse,
-    AuthEntity? authResponse,
-    String? errorMessage,
-  }) {
-    return AuthState(
-      isLoading: isLoading ?? this.isLoading,
-      loginResponse: loginResponse ?? this.loginResponse,
-      authResponse: authResponse ?? this.authResponse,
-      errorMessage: errorMessage,
-    );
-  }
+  bool get isLoading => this is AuthLoading;
 
   @override
-  List<Object?> get props => [
-    isLoading,
-    loginResponse,
-    authResponse,
-    errorMessage,
-  ];
+  List<Object?> get props => [];
+}
+
+class AuthInitial extends AuthState {
+  const AuthInitial();
+}
+
+class AuthLoading extends AuthState {
+  const AuthLoading();
+}
+
+class OtpSent extends AuthState {
+  const OtpSent(this.response);
+
+  final LoginEntity response;
+
+  @override
+  List<Object?> get props => [response];
+}
+
+class Authenticated extends AuthState {
+  const Authenticated(this.response);
+
+  final AuthEntity response;
+
+  @override
+  List<Object?> get props => [response];
+}
+
+class AuthFailure extends AuthState {
+  const AuthFailure(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => [message];
 }

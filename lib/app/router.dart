@@ -1,31 +1,50 @@
 import 'package:go_router/go_router.dart';
-import 'package:namarang/features/auth/presentation/pages/otp_page.dart';
-import 'package:namarang/features/home/pages/home_page.dart';
 
+import '../core/session/session_controller.dart';
 import '../features/auth/presentation/pages/login_page.dart';
-// import '../features/home/presentation/pages/home_page.dart';
+import '../features/auth/presentation/pages/otp_page.dart';
+import '../features/main/presentation/pages/main_shell_page.dart';
 import '../features/splash/presentation/pages/splash_page.dart';
 
 class AppRouter {
   AppRouter._();
 
-  static final router = GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(path: '/', builder: (_, __) => const SplashPage()),
-      GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
-      GoRoute(
-        path: '/otp',
-        builder: (context, state) {
-          final phone = state.extra as String;
-          return OtpPage(phoneNumber: phone);
-        },
-      ),
-      GoRoute(
-        path: '/home',
-        // builder: (_, __) => const HomePage(),
-        builder: (_, __) => const HomePage(),
-      ),
-    ],
-  );
+  static GoRouter create(SessionController session) {
+    return GoRouter(
+      initialLocation: '/',
+      refreshListenable: session,
+      redirect: (context, state) {
+        final location = state.matchedLocation;
+        final isSplash = location == '/';
+        final isAuthRoute = location == '/login' || location == '/otp';
+
+        switch (session.status) {
+          case SessionStatus.unknown:
+            return isSplash ? null : '/';
+          case SessionStatus.unauthenticated:
+            if (isSplash || !isAuthRoute) return '/login';
+            return null;
+          case SessionStatus.authenticated:
+            return isSplash || isAuthRoute ? '/home' : null;
+        }
+      },
+      routes: [
+        GoRoute(path: '/', builder: (context, state) => const SplashPage()),
+        GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
+        GoRoute(
+          path: '/otp',
+          redirect: (context, state) {
+            final phone = state.uri.queryParameters['phone'];
+            return phone == null || phone.isEmpty ? '/login' : null;
+          },
+          builder: (context, state) =>
+              OtpPage(phoneNumber: state.uri.queryParameters['phone']!),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const MainShellPage(),
+        ),
+      ],
+    );
+  }
 }

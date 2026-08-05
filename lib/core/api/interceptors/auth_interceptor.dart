@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../storage/secure_storage.dart';
+import '../../session/session_controller.dart';
 import '../api_endpoints.dart';
 
 /// اینترسپتور احراز هویت.
@@ -16,9 +17,10 @@ import '../api_endpoints.dart';
 /// نکته: endpoint رفرش (`/refresh`) با `application/x-www-form-urlencoded`
 /// کار می‌کنه، نه JSON.
 class AuthInterceptor extends QueuedInterceptor {
-  AuthInterceptor(this._storage);
+  AuthInterceptor(this._storage, this._session);
 
   final SecureStorage _storage;
+  final SessionController _session;
 
   /// یک Dio خام و بدون هیچ interceptor ای، مخصوص زدن /refresh و retry
   /// کردن ریکوئست اصلی. چون هیچ اینترسپتوری روش نیست، هیچ‌وقت خودش وارد
@@ -60,6 +62,7 @@ class AuthInterceptor extends QueuedInterceptor {
     final refreshToken = await _storage.getRefreshToken();
 
     if (refreshToken == null || refreshToken.isEmpty) {
+      await _session.signOut();
       return handler.next(err);
     }
 
@@ -93,9 +96,7 @@ class AuthInterceptor extends QueuedInterceptor {
 
       return handler.resolve(retryResponse);
     } catch (_) {
-      // رفرش هم شکست خورد (مثلاً refresh token هم منقضی شده).
-      // عمداً logout نمی‌کنیم؛ فقط خطای اصلی ۴۰۱ را پاس می‌دهیم تا لایه
-      // بالاتر (Cubit/UI) خودش تصمیم بگیرد.
+      await _session.signOut();
       return handler.next(err);
     }
   }

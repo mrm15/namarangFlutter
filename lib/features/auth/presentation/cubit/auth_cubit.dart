@@ -1,29 +1,26 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/login_request.dart';
-import '../../data/models/verify_otp_request.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/verify_otp_usecase.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._loginUseCase, this._verifyOtpUseCase)
-    : super(const AuthState());
+    : super(const AuthInitial());
 
   final LoginUseCase _loginUseCase;
   final VerifyOtpUseCase _verifyOtpUseCase;
 
   Future<void> sendOtp(String phoneNumber) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    if (state.isLoading) return;
+    emit(const AuthLoading());
 
     try {
-      final response = await _loginUseCase(
-        LoginRequest(phoneNumber: phoneNumber),
-      );
-
-      emit(state.copyWith(isLoading: false, loginResponse: response));
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      final response = await _loginUseCase(phoneNumber);
+      emit(OtpSent(response));
+    } on Failure catch (failure) {
+      emit(AuthFailure(failure.message));
     }
   }
 
@@ -31,20 +28,17 @@ class AuthCubit extends Cubit<AuthState> {
     required String phoneNumber,
     required String code,
   }) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    if (state.isLoading) return;
+    emit(const AuthLoading());
 
     try {
       final response = await _verifyOtpUseCase(
-        VerifyOtpRequest(phoneNumber: phoneNumber, loginCode: code),
+        phoneNumber: phoneNumber,
+        code: code,
       );
-
-      emit(state.copyWith(isLoading: false, authResponse: response));
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      emit(Authenticated(response));
+    } on Failure catch (failure) {
+      emit(AuthFailure(failure.message));
     }
-  }
-
-  void clearError() {
-    emit(state.copyWith(errorMessage: null));
   }
 }

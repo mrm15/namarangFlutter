@@ -35,14 +35,19 @@ class _LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           developer.log('SERVICE STARTED', name: 'NAMRANG');
 
-          if (state.loginResponse?.success == true) {
-            context.push('/otp', extra: phoneController.text.trim());
+          if (state is OtpSent) {
+            context.push(
+              Uri(
+                path: '/otp',
+                queryParameters: {'phone': phoneController.text.trim()},
+              ).toString(),
+            );
           }
 
-          if (state.errorMessage != null) {
+          if (state is AuthFailure) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {

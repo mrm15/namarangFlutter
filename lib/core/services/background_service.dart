@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 @pragma('vm:entry-point')
 class BackgroundService {
   static final service = FlutterBackgroundService();
+  static StreamSubscription<Position>? _positionSubscription;
 
   static Future<void> initialize() async {
     await service.configure(
@@ -64,18 +65,21 @@ class BackgroundService {
       distanceFilter: 10,
     );
 
-    Geolocator.getPositionStream(locationSettings: locationSettings).listen((
-      position,
-    ) {
-      developer.log(
-        'LAT:${position.latitude} '
-        'LNG:${position.longitude}',
+    _positionSubscription =
+        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+          (position) {
+            developer.log(
+              'LAT:${position.latitude} '
+              'LNG:${position.longitude}',
 
-        name: 'NAMRANG',
-      );
-    });
+              name: 'NAMRANG',
+            );
+          },
+        );
 
-    service.on('stop').listen((event) {
+    service.on('stop').listen((event) async {
+      await _positionSubscription?.cancel();
+      _positionSubscription = null;
       service.stopSelf();
     });
   }

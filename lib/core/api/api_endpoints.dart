@@ -10,4 +10,8 @@ class ApiEndpoints {
   // static const String sendLocation = '/driver/location';
 
   static const refreshToken = '/refresh';
+
+  static const getWorkStatus = '/userStatus/getWorkStatus';
+
+  static const setWorkStatus = '/userStatus/setWorkStatus';
 }
