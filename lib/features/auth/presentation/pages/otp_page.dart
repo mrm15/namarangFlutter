@@ -7,6 +7,7 @@ import 'package:namarang/core/di/locator.dart';
 import 'package:namarang/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:namarang/features/auth/presentation/cubit/auth_state.dart';
 import 'package:namarang/features/auth/presentation/widgets/otp_code_field.dart';
+import 'package:namarang/core/widgets/app_loader.dart';
 
 class OtpPage extends StatefulWidget {
   const OtpPage({super.key, required this.phoneNumber});
@@ -116,14 +117,10 @@ class _OtpPageState extends State<OtpPage> {
                                               ? null
                                               : () => _verify(context, state),
                                           child: state.isLoading
-                                              ? const SizedBox(
-                                                  width: 22,
-                                                  height: 22,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                        color: Colors.white,
-                                                      ),
+                                              ? const AppLoader(
+                                                  size: 22,
+                                                  strokeWidth: 2,
+                                                  color: Colors.white,
                                                 )
                                               : const Text(
                                                   AppStrings.otpVerifyButton,

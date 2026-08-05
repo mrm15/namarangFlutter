@@ -20,6 +20,11 @@ import 'package:namarang/features/work_status/domain/repositories/work_status_re
 import 'package:namarang/features/work_status/domain/usecases/get_work_status_usecase.dart';
 import 'package:namarang/features/work_status/domain/usecases/set_work_status_usecase.dart';
 import 'package:namarang/features/work_status/presentation/cubit/work_status_cubit.dart';
+import 'package:namarang/features/profile/data/datasources/profile_remote_data_source.dart';
+import 'package:namarang/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:namarang/features/profile/domain/repositories/profile_repository.dart';
+import 'package:namarang/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:namarang/features/profile/presentation/cubit/profile_cubit.dart';
 
 final locator = GetIt.instance;
 
@@ -86,5 +91,18 @@ Future<void> setupLocator() async {
       locator<GetWorkStatusUseCase>(),
       locator<SetWorkStatusUseCase>(),
     ),
+  );
+
+  locator.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(locator<ApiClient>()),
+  );
+  locator.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(locator<ProfileRemoteDataSource>()),
+  );
+  locator.registerLazySingleton<GetProfileUseCase>(
+    () => GetProfileUseCase(locator<ProfileRepository>()),
+  );
+  locator.registerFactory<ProfileCubit>(
+    () => ProfileCubit(locator<GetProfileUseCase>()),
   );
 }

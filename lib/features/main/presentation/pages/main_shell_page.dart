@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:namarang/core/di/locator.dart';
+import 'package:namarang/core/constants/app_strings.dart';
 import 'package:namarang/features/home/pages/home_page.dart';
 import 'package:namarang/features/more/presentation/pages/more_page.dart';
 import 'package:namarang/features/profile/presentation/pages/profile_page.dart';
@@ -58,17 +59,17 @@ class _MainShellPageState extends State<MainShellPage> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline),
                 activeIcon: Icon(Icons.person),
-                label: 'حساب کاربری',
+                label: AppStrings.profileTab,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.local_shipping_outlined),
                 activeIcon: Icon(Icons.local_shipping),
-                label: 'راننده',
+                label: AppStrings.driverTab,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.more_horiz_outlined),
                 activeIcon: Icon(Icons.more_horiz),
-                label: 'بیشتر',
+                label: AppStrings.moreTab,
               ),
             ],
           ),

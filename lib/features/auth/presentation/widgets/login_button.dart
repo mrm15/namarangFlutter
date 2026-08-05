@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namarang/core/constants/app_strings.dart';
+import 'package:namarang/core/widgets/app_loader.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({
@@ -19,7 +20,7 @@ class LoginButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: loading ? null : onPressed,
         child: loading
-            ? const CircularProgressIndicator()
+            ? const AppLoader(size: 22, color: Colors.white)
             : const Text(
                 AppStrings.btnLoginLabel,
                 style: TextStyle(fontWeight: FontWeight.w700),

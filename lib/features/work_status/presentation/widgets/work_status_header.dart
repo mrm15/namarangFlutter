@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/widgets/app_loader.dart';
 import '../../domain/entities/work_status.dart';
 import '../cubit/work_status_cubit.dart';
 import '../cubit/work_status_state.dart';
@@ -39,7 +41,7 @@ class WorkStatusHeader extends StatelessWidget implements PreferredSizeWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'نمارنگ',
+                        AppStrings.appName,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -47,7 +49,7 @@ class WorkStatusHeader extends StatelessWidget implements PreferredSizeWidget {
                         ),
                       ),
                       Text(
-                        'سامانه رانندگان',
+                        AppStrings.driversSystem,
                         style: TextStyle(color: Colors.white70, fontSize: 11),
                       ),
                     ],
@@ -110,14 +112,7 @@ class _StatusPill extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (state.isLoading)
-                const SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white70,
-                  ),
-                )
+                const AppLoader(size: 14, strokeWidth: 2, color: Colors.white70)
               else
                 Container(
                   width: 9,
@@ -139,12 +134,12 @@ class _StatusPill extends StatelessWidget {
               const SizedBox(width: 7),
               Text(
                 state.isLoading
-                    ? 'در حال دریافت'
+                    ? AppStrings.workStatusLoading
                     : status == null
-                    ? 'نامشخص'
+                    ? AppStrings.workStatusUnknown
                     : isReady
-                    ? 'آماده کار'
-                    : 'غیرفعال',
+                    ? AppStrings.workStatusReady
+                    : AppStrings.workStatusInactive,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -180,70 +175,74 @@ class _WorkStatusSheet extends StatelessWidget {
         ),
         child: BlocBuilder<WorkStatusCubit, WorkStatusState>(
           builder: (context, state) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 42,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD7DCE2),
-                    borderRadius: BorderRadius.circular(2),
+            return AppLoadingOverlay(
+              isLoading: state.isUpdating,
+              style: AppLoadingOverlayStyle.subtle,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 42,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD7DCE2),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 18),
-                Row(
-                  children: [
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'وضعیت کاری',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppStrings.workStatusTitle,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 3),
-                          Text(
-                            'وضعیت دریافت سفارش را انتخاب کنید',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
+                            SizedBox(height: 3),
+                            Text(
+                              AppStrings.workStatusDescription,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppColors.textSecondary,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: state.isUpdating
-                          ? null
-                          : () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                _StatusOption(
-                  status: WorkStatus.ready,
-                  title: 'آماده دریافت کار',
-                  subtitle: 'سفارش جدید برای شما ارسال می‌شود',
-                  color: const Color(0xFF22C55E),
-                  selected: state.status == WorkStatus.ready,
-                  loading: state.isUpdating,
-                ),
-                const SizedBox(height: 10),
-                _StatusOption(
-                  status: WorkStatus.notReady,
-                  title: 'دریافت کار غیرفعال',
-                  subtitle: 'سفارش جدیدی دریافت نمی‌کنید',
-                  color: const Color(0xFFEF4444),
-                  selected: state.status == WorkStatus.notReady,
-                  loading: state.isUpdating,
-                ),
-              ],
+                      IconButton(
+                        onPressed: state.isUpdating
+                            ? null
+                            : () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  _StatusOption(
+                    status: WorkStatus.ready,
+                    title: AppStrings.readyForWorkTitle,
+                    subtitle: AppStrings.readyForWorkSubtitle,
+                    color: const Color(0xFF22C55E),
+                    selected: state.status == WorkStatus.ready,
+                    loading: state.isUpdating,
+                  ),
+                  const SizedBox(height: 10),
+                  _StatusOption(
+                    status: WorkStatus.notReady,
+                    title: AppStrings.inactiveWorkTitle,
+                    subtitle: AppStrings.inactiveWorkSubtitle,
+                    color: const Color(0xFFEF4444),
+                    selected: state.status == WorkStatus.notReady,
+                    loading: state.isUpdating,
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -333,7 +332,7 @@ class _StatusOption extends StatelessWidget {
                     Icon(Icons.check_circle_rounded, color: color, size: 20),
                     const SizedBox(width: 4),
                     Text(
-                      'فعال',
+                      AppStrings.active,
                       style: TextStyle(
                         color: color,
                         fontSize: 11,

@@ -16,7 +16,8 @@
     <application
         android:label="namarang"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round">
         <service
     android:name="id.flutter.flutter_background_service.BackgroundService"
     android:foregroundServiceType="location"

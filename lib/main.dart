@@ -9,5 +9,6 @@ Future<void> main() async {
 
   await setupLocator();
   final session = locator<SessionController>();
+  await session.initialize();
   runApp(NamrangApp(router: AppRouter.create(session)));
 }

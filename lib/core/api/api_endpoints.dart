@@ -14,4 +14,6 @@ class ApiEndpoints {
   static const getWorkStatus = '/userStatus/getWorkStatus';
 
   static const setWorkStatus = '/userStatus/setWorkStatus';
+
+  static const userInfo = '/user/info';
 }

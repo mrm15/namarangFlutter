@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 import 'dart:ui';
 
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -48,8 +47,6 @@ class BackgroundService {
   static void onStart(ServiceInstance service) {
     DartPluginRegistrant.ensureInitialized();
 
-    developer.log('SERVICE STARTED', name: 'NAMRANG');
-
     if (service is AndroidServiceInstance) {
       service.setAsForegroundService();
 
@@ -65,17 +62,9 @@ class BackgroundService {
       distanceFilter: 10,
     );
 
-    _positionSubscription =
-        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-          (position) {
-            developer.log(
-              'LAT:${position.latitude} '
-              'LNG:${position.longitude}',
-
-              name: 'NAMRANG',
-            );
-          },
-        );
+    _positionSubscription = Geolocator.getPositionStream(
+      locationSettings: locationSettings,
+    ).listen((_) {});
 
     service.on('stop').listen((event) async {
       await _positionSubscription?.cancel();
