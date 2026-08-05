@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../storage/secure_storage.dart';
 import '../../session/session_controller.dart';
+import '../../constants/app_keys.dart';
 import '../api_endpoints.dart';
 
 /// اینترسپتور احراز هویت.
@@ -35,13 +36,13 @@ class AuthInterceptor extends QueuedInterceptor {
     final accessToken = await _storage.getAccessToken();
 
     if (accessToken != null && accessToken.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $accessToken';
+      options.headers[AppKeys.authorizationHeader] = 'Bearer $accessToken';
     }
 
     options.headers.addAll({
-      'X-Client-Platform': 'flutter',
-      'X-App-Version': '1.0.0',
-      'X-Device-Platform': defaultTargetPlatform.name,
+      AppKeys.clientPlatformHeader: 'flutter',
+      AppKeys.appVersionHeader: '1.0.0',
+      AppKeys.devicePlatformHeader: defaultTargetPlatform.name,
     });
 
     handler.next(options);
@@ -53,7 +54,8 @@ class AuthInterceptor extends QueuedInterceptor {
     ErrorInterceptorHandler handler,
   ) async {
     final isUnauthorized = err.response?.statusCode == 401;
-    final alreadyRetried = err.requestOptions.extra['retried'] == true;
+    final alreadyRetried =
+        err.requestOptions.extra[AppKeys.retriedRequest] == true;
 
     if (!isUnauthorized || alreadyRetried) {
       return handler.next(err);
@@ -69,28 +71,29 @@ class AuthInterceptor extends QueuedInterceptor {
     try {
       final refreshResponse = await _rawDio.post(
         ApiEndpoints.refreshToken,
-        data: {'refreshToken': refreshToken},
+        data: {AppKeys.refreshToken: refreshToken},
         options: Options(
           contentType: Headers.formUrlEncodedContentType,
           headers: {
-            'x-client-platform': 'flutter',
-            'x-app-version': '1.0.0',
-            'x-device-platform': defaultTargetPlatform.name,
+            AppKeys.clientPlatformHeader: 'flutter',
+            AppKeys.appVersionHeader: '1.0.0',
+            AppKeys.devicePlatformHeader: defaultTargetPlatform.name,
           },
         ),
       );
 
       final newData = refreshResponse.data as Map<String, dynamic>;
-      final newAccessToken = newData['accessToken'] as String;
-      final newRefreshToken = newData['refreshToken'] as String;
+      final newAccessToken = newData[AppKeys.accessToken] as String;
+      final newRefreshToken = newData[AppKeys.refreshToken] as String;
 
       await _storage.saveTokens(
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
       );
 
-      err.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
-      err.requestOptions.extra['retried'] = true;
+      err.requestOptions.headers[AppKeys.authorizationHeader] =
+          'Bearer $newAccessToken';
+      err.requestOptions.extra[AppKeys.retriedRequest] = true;
 
       final retryResponse = await _rawDio.fetch(err.requestOptions);
 

@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 
 import '../core/session/session_controller.dart';
+import '../core/constants/app_keys.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/otp_page.dart';
 import '../features/main/presentation/pages/main_shell_page.dart';
@@ -34,11 +35,12 @@ class AppRouter {
         GoRoute(
           path: '/otp',
           redirect: (context, state) {
-            final phone = state.uri.queryParameters['phone'];
+            final phone = state.uri.queryParameters[AppKeys.phoneQuery];
             return phone == null || phone.isEmpty ? '/login' : null;
           },
-          builder: (context, state) =>
-              OtpPage(phoneNumber: state.uri.queryParameters['phone']!),
+          builder: (context, state) => OtpPage(
+            phoneNumber: state.uri.queryParameters[AppKeys.phoneQuery]!,
+          ),
         ),
         GoRoute(
           path: '/home',

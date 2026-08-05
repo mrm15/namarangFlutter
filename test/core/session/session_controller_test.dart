@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:namarang/core/session/session_controller.dart';
 import 'package:namarang/core/storage/secure_storage.dart';
+import 'package:namarang/core/constants/app_keys.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -9,7 +10,9 @@ void main() {
   test(
     'requires both access and refresh tokens for an authenticated session',
     () async {
-      FlutterSecureStorage.setMockInitialValues({'access_token': 'access'});
+      FlutterSecureStorage.setMockInitialValues({
+        AppKeys.accessTokenStorage: 'access',
+      });
       final session = SessionController(SecureStorage());
 
       await session.initialize();
@@ -20,8 +23,8 @@ void main() {
 
   test('recognizes a complete stored session', () async {
     FlutterSecureStorage.setMockInitialValues({
-      'access_token': 'access',
-      'refresh_token': 'refresh',
+      AppKeys.accessTokenStorage: 'access',
+      AppKeys.refreshTokenStorage: 'refresh',
     });
     final session = SessionController(SecureStorage());
 
@@ -32,8 +35,8 @@ void main() {
 
   test('sign out removes tokens and updates status', () async {
     FlutterSecureStorage.setMockInitialValues({
-      'access_token': 'access',
-      'refresh_token': 'refresh',
+      AppKeys.accessTokenStorage: 'access',
+      AppKeys.refreshTokenStorage: 'refresh',
     });
     final storage = SecureStorage();
     final session = SessionController(storage);

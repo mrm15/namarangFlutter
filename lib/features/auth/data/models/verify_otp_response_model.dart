@@ -1,4 +1,5 @@
 import '../../domain/entities/auth_entity.dart';
+import '../../../../core/constants/app_keys.dart';
 import 'user_model.dart';
 
 class VerifyOtpResponseModel {
@@ -24,8 +25,8 @@ class VerifyOtpResponseModel {
     return VerifyOtpResponseModel(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
-      accessToken: data['accessToken'] ?? '',
-      refreshToken: data['refreshToken'] ?? '',
+      accessToken: data[AppKeys.accessToken] ?? '',
+      refreshToken: data[AppKeys.refreshToken] ?? '',
       user: UserModel.fromJson(userData),
     );
   }

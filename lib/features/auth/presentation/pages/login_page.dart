@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:namarang/core/constants/app_colors.dart';
 import 'package:namarang/core/constants/app_strings.dart';
+import 'package:namarang/core/constants/app_keys.dart';
 import 'package:namarang/gen/assets.gen.dart';
 
 import '../../../../core/di/locator.dart';
@@ -39,7 +40,9 @@ class _LoginPageState extends State<LoginPage> {
             context.push(
               Uri(
                 path: '/otp',
-                queryParameters: {'phone': phoneController.text.trim()},
+                queryParameters: {
+                  AppKeys.phoneQuery: phoneController.text.trim(),
+                },
               ).toString(),
             );
           }
