@@ -7,7 +7,7 @@ class ApiEndpoints {
 
   static const String verifyOtp = '/login/verify';
 
-  // static const String sendLocation = '/driver/location';
+  static const String sendLocation = '/location';
 
   static const refreshToken = '/refresh';
 

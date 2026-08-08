@@ -8,8 +8,12 @@ class PermissionService {
       return false;
     }
 
-    final background = await Permission.locationAlways.request();
+    await Permission.notification.request();
 
-    return background.isGranted;
+    // Android سرویس مکان را زمانی که اپ جلوی کاربر است شروع می‌کند؛ بنابراین
+    // رد کردن دسترسی Always نباید شروع foreground service را متوقف کند.
+    await Permission.locationAlways.request();
+
+    return true;
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:namarang/core/constants/app_colors.dart';
+import 'package:namarang/core/constants/app_strings.dart';
+import 'package:namarang/core/widgets/app_loader.dart';
+import 'package:namarang/features/profile/domain/entities/profile_entity.dart';
+import 'package:namarang/features/profile/presentation/cubit/profile_cubit.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/widgets/app_loader.dart';
-import '../../domain/entities/profile_entity.dart';
-import '../cubit/profile_cubit.dart';
 import 'profile_identity_card.dart';
 import 'profile_logout_button.dart';
 import 'profile_section_card.dart';

@@ -6,6 +6,14 @@ import '../../session/session_controller.dart';
 import '../../constants/app_keys.dart';
 import '../api_endpoints.dart';
 
+@visibleForTesting
+bool shouldSignOutForAuthFailure({
+  required String requestPath,
+  required int? statusCode,
+}) {
+  return requestPath == ApiEndpoints.refreshToken && statusCode == 401;
+}
+
 /// اینترسپتور احراز هویت.
 ///
 /// وظایف:
@@ -53,7 +61,20 @@ class AuthInterceptor extends QueuedInterceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    final isUnauthorized = err.response?.statusCode == 401;
+    final statusCode = err.response?.statusCode;
+    final requestPath = err.requestOptions.uri.path;
+
+    // فقط ۴۰۱ خود endpoint رفرش به معنی پایان نشست است. هیچ ۴۰۱ دیگری،
+    // خطای ۴۰۳، خطای سرور یا خطای شبکه مستقیماً کاربر را خارج نمی‌کند.
+    if (shouldSignOutForAuthFailure(
+      requestPath: requestPath,
+      statusCode: statusCode,
+    )) {
+      await _session.signOut();
+      return handler.next(err);
+    }
+
+    final isUnauthorized = statusCode == 401;
     final alreadyRetried =
         err.requestOptions.extra[AppKeys.retriedRequest] == true;
 
@@ -64,7 +85,6 @@ class AuthInterceptor extends QueuedInterceptor {
     final refreshToken = await _storage.getRefreshToken();
 
     if (refreshToken == null || refreshToken.isEmpty) {
-      await _session.signOut();
       return handler.next(err);
     }
 
@@ -98,8 +118,16 @@ class AuthInterceptor extends QueuedInterceptor {
       final retryResponse = await _rawDio.fetch(err.requestOptions);
 
       return handler.resolve(retryResponse);
+    } on DioException catch (refreshError) {
+      if (shouldSignOutForAuthFailure(
+        requestPath: refreshError.requestOptions.uri.path,
+        statusCode: refreshError.response?.statusCode,
+      )) {
+        await _session.signOut();
+      }
+
+      return handler.next(err);
     } catch (_) {
-      await _session.signOut();
       return handler.next(err);
     }
   }

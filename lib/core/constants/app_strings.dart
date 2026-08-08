@@ -35,6 +35,19 @@ abstract final class AppStrings {
   static const moreTab = 'بیشتر';
   static const driverPage = 'صفحه راننده';
   static const comingSoon = 'به‌زودی...';
+  static const trackingTestTitle = 'تست ارسال موقعیت';
+  static const trackingTestDescription =
+      'با شروع تست، موقعیت شما هر ۳۰ ثانیه ذخیره و به سرور ارسال می‌شود.';
+  static const startLocationTracking = 'شروع ارسال موقعیت';
+  static const startingLocationTracking = 'در حال شروع سرویس...';
+  static const trackingActive = 'سرویس ثبت موقعیت فعال است';
+  static const waitingForLocationResponse = 'در انتظار پاسخ سرور...';
+  static const locationPermissionRequired =
+      'برای شروع ارسال، دسترسی موقعیت را فعال کنید.';
+  static const locationSendSucceeded = 'ارسال موقعیت موفق بود';
+  static const locationSendFailed = 'ارسال موقعیت ناموفق بود';
+  static const serverResponse = 'پاسخ سرور';
+  static const statusCode = 'کد وضعیت';
 
   // Work status
   static const workStatusLoading = 'در حال دریافت';
